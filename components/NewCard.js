@@ -92,7 +92,7 @@ const NewCard = () => {
 
   return (
     <>
-      <div className="card admin-card" onClick={openModal}>
+      <div className="card admin-card cursor-pointer text-l text-center border-solid border border-slate-300 rounded-md p-2 mb-2 lg:text-xl hover:bg-slate-200" onClick={openModal}>
         Добавить новый канал
       </div>
 
