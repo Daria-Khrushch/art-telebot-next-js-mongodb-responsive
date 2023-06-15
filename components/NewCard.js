@@ -1,6 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "./Modal";
+import { useFilterContext } from "./FilterContext";
 
 const NewCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,6 +17,8 @@ const NewCard = () => {
   const [cpv, setCpv] = useState(0);
   const [errors, setErrors] = useState({});
 
+  const { themes, lang } = useFilterContext();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,7 +33,13 @@ const NewCard = () => {
     if (!theme) {
       validationErrors.theme = "Пожалуйста, введите тему канала";
     }
+    if (theme === "Введите тему канала") {
+      validationErrors.theme = "Пожалуйста, введите тему канала";
+    }
     if (!language) {
+      validationErrors.language = "Пожалуйста, введите язык канала";
+    }
+    if (language === "Введите язык канала") {
       validationErrors.language = "Пожалуйста, введите язык канала";
     }
     if (!description) {
@@ -92,12 +101,19 @@ const NewCard = () => {
 
   return (
     <>
-      <div className="card admin-card cursor-pointer text-l text-center border-solid border border-slate-300 rounded-md p-2 mb-2 lg:text-xl hover:bg-slate-200" onClick={openModal}>
+      <div
+        className="card admin-card cursor-pointer text-l text-center border-solid border border-slate-300 rounded-md p-2 mb-2 lg:text-xl hover:bg-slate-200"
+        onClick={openModal}
+      >
         Добавить новый канал
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <form id="buyer-modal-form" onSubmit={handleSubmit} className="modal-form">
+        <form
+          id="buyer-modal-form"
+          onSubmit={handleSubmit}
+          className="modal-form"
+        >
           <label className="modal-label">
             Название:
             <input
@@ -124,22 +140,52 @@ const NewCard = () => {
 
           <label className="modal-label">
             Тема:
-            <input
-              className="modal-input"
-              type="text"
-              value={theme}
-              onChange={(e) => setTheme(e.target.value)}
-            />
+            <div className="flex">
+              <input
+                className="modal-input"
+                type="text"
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+              />
+              <select
+                className="modal-input "
+                onChange={(e) => setTheme(e.target.value)}
+              >
+                <option value="Введите тему канала">Свой вариант</option>
+                {themes && themes.length > 0
+                  ? themes.map((item) => (
+                      <option key={item} className="" value={item}>
+                        {item}
+                      </option>
+                    ))
+                  : null}
+              </select>
+            </div>
             {errors.theme && <span className="error">{errors.theme}</span>}
           </label>
 
           <label className="modal-label">
             Язык канала:
-            <input
-              className="modal-input"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-            />
+            <div className="flex">
+              <input
+                className="modal-input"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+              />
+              <select
+                className="modal-input "
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                <option value="Введите язык канала">Свой вариант</option>
+                {lang && lang.length > 0
+                  ? lang.map((item) => (
+                      <option key={item} className="" value={item}>
+                        {item}
+                      </option>
+                    ))
+                  : null}
+              </select>
+            </div>
             {errors.language && (
               <span className="error">{errors.language}</span>
             )}
@@ -149,7 +195,8 @@ const NewCard = () => {
             Количество просмотров:
             <input
               className="modal-input"
-              type="number" inputMode="numeric"
+              type="number"
+              inputMode="numeric"
               value={views}
               onChange={(e) => setViews(parseInt(e.target.value))}
             ></input>
@@ -158,7 +205,8 @@ const NewCard = () => {
             Колличество подписчиков:
             <input
               className="modal-input"
-              type="number" inputMode="numeric"
+              type="number"
+              inputMode="numeric"
               value={subscribers}
               onChange={(e) => setSubscribers(parseInt(e.target.value))}
             ></input>
@@ -167,7 +215,8 @@ const NewCard = () => {
             CPV:
             <input
               className="modal-input"
-              type="number" inputMode="numeric"
+              type="number"
+              inputMode="numeric"
               value={cpv}
               onChange={(e) => setCpv(parseInt(e.target.value))}
             ></input>

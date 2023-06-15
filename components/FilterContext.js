@@ -10,8 +10,8 @@ export function FilterContextProvider({ children }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchTheme, setSearchTheme] = useState("");
   const [searchLang, setSearchLang] = useState("");
-    const [searchTitle, setSearchTitle] = useState("");
-    const [showLoader, setShowLoader] = useState(true);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [showLoader, setShowLoader] = useState(true);
   const [showNoChannel, setShowNoChannel] = useState(false);
   // const { queryParams, setQueryParams } = useQueryParams();
   const [isViewSorted, setIsViewSorted] = useState(false);
@@ -20,14 +20,15 @@ export function FilterContextProvider({ children }) {
   const [isSubSortedDesc, setIsSubSortedDesc] = useState(false);
   const [isCpvSorted, setIsCpvSorted] = useState(false);
   const [isCpvSortedDesc, setIsCpvSortedDesc] = useState(false);
-    const [removedChannels, setRemovedChannels] = useState([])
-
+  const [removedChannels, setRemovedChannels] = useState([]);
+  const [themes, setThemes] = useState([]);
+  const [lang, setLang] = useState([]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-   useEffect(() => {
+  useEffect(() => {
     const getData = async () => {
       try {
         const res = await fetch(
@@ -37,17 +38,29 @@ export function FilterContextProvider({ children }) {
         const filteredChannels = data.filter(
           (channel) => channel.is_shown === 1
         );
-        const otherChannels = data.filter(
-          (channel) => channel.is_shown === 0
-        );
+        const otherChannels = data.filter((channel) => channel.is_shown === 0);
         setChannels(filteredChannels);
-        setRemovedChannels(otherChannels)
+        setRemovedChannels(otherChannels);
       } catch (error) {
         console.log(error);
       }
     };
     getData();
   }, [searchTitle, searchTheme, searchLang]);
+
+    useEffect(() => {
+
+    const uniqueThemes = Array.from(
+      new Set(channels.map((channel) => channel.theme))
+    );
+    const uniqueLang = Array.from(
+      new Set(channels.map((channel) => channel.language))
+    );
+
+    setThemes(uniqueThemes);
+  
+    setLang(uniqueLang);
+  }, [channels]);
 
   const onSearch = async (event) => {
     event.preventDefault();
@@ -70,9 +83,9 @@ export function FilterContextProvider({ children }) {
   const onLangFilter = (event) => {
     event.preventDefault();
     setSearchLang(event.target.value);
-    };
-    
-      const handleSortByView = () => {
+  };
+
+  const handleSortByView = () => {
     const sortedList = channels.slice();
     sortedList.sort((a, b) => {
       if (!isViewSorted && !isViewSortedDesc) {
@@ -107,10 +120,10 @@ export function FilterContextProvider({ children }) {
       }
     });
 
-     const filteredChannels = sortedList.filter(
-          (channel) => channel.is_shown === 1
-        );
-        setChannels(filteredChannels);
+    const filteredChannels = sortedList.filter(
+      (channel) => channel.is_shown === 1
+    );
+    setChannels(filteredChannels);
   };
 
   const handleSortByCpv = () => {
@@ -128,34 +141,36 @@ export function FilterContextProvider({ children }) {
       }
     });
 
-     const filteredChannels = sortedList.filter(
-          (channel) => channel.is_shown === 1
-        );
-        setChannels(filteredChannels);
+    const filteredChannels = sortedList.filter(
+      (channel) => channel.is_shown === 1
+    );
+    setChannels(filteredChannels);
   };
 
   const contextValue = {
-      channels,
-      setChannels,
-      searchQuery,
-      setSearchQuery,
-      onSearch,
-      onThemeFilter,
-      onLangFilter,
-      toggleMenu,
-      isMenuOpen,
-      isSubSorted,
-      handleSortByCpv,
-      handleSortBySubs,
-      handleSortByView,
-      isViewSorted,
-      isCpvSorted,
-      isCpvSortedDesc,
-      isSubSortedDesc,
-      isViewSortedDesc,
-      showLoader,
+    channels,
+    setChannels,
+    searchQuery,
+    setSearchQuery,
+    onSearch,
+    onThemeFilter,
+    onLangFilter,
+    toggleMenu,
+    isMenuOpen,
+    isSubSorted,
+    handleSortByCpv,
+    handleSortBySubs,
+    handleSortByView,
+    isViewSorted,
+    isCpvSorted,
+    isCpvSortedDesc,
+    isSubSortedDesc,
+    isViewSortedDesc,
+    showLoader,
     showNoChannel,
-      removedChannels
+    removedChannels,
+    themes,
+  lang
   };
 
   return (

@@ -2,6 +2,8 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
+import { useFilterContext } from "./FilterContext";
+
 
 const AdminCards = ({ channel }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,6 +20,9 @@ const AdminCards = ({ channel }) => {
   const [shown, setShown] = useState(1);
   const [cpv, setCpv] = useState(channel.cpv);
   const [errors, setErrors] = useState({});
+
+    const { themes, lang } = useFilterContext();
+
 
   useEffect(() => {
     setPrice(channel.cpv);
@@ -38,6 +43,13 @@ const AdminCards = ({ channel }) => {
       validationErrors.theme = "Пожалуйста, введите тему канала";
     }
     if (!language) {
+      validationErrors.language = "Пожалуйста, введите язык канала";
+    }
+    if (theme === "Введите тему канала") {
+      validationErrors.theme = "Пожалуйста, введите тему канала";
+    }
+
+    if (language === "Введите язык канала") {
       validationErrors.language = "Пожалуйста, введите язык канала";
     }
     if (!description) {
@@ -76,15 +88,6 @@ const AdminCards = ({ channel }) => {
           console.error(error);
         });
     }
-
-    setChannelName("");
-    setAva("");
-    setTheme("");
-    setDescription("");
-    setLanguage("");
-    setCpv(0);
-    setSubscribers(0);
-    setViews(0);
     setErrors({});
     setIsModalOpen(false);
   };
@@ -228,24 +231,54 @@ const AdminCards = ({ channel }) => {
             {errors.ava && <span className="error">{errors.ava}</span>}
           </label>
 
-          <label className="modal-label">
+                   <label className="modal-label">
             Тема:
-            <input
-              className="modal-input"
-              type="text"
-              value={theme}
-              onChange={(e) => setTheme(e.target.value)}
-            />
+            <div className="flex">
+              <input
+                className="modal-input"
+                type="text"
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+              />
+              <select
+                className="modal-input "
+                onChange={(e) => setTheme(e.target.value)}
+              >
+                <option value="Введите тему канала">Свой вариант</option>
+                {themes && themes.length > 0
+                  ? themes.map((item) => (
+                      <option key={item} className="" value={item}>
+                        {item}
+                      </option>
+                    ))
+                  : null}
+              </select>
+            </div>
             {errors.theme && <span className="error">{errors.theme}</span>}
           </label>
 
           <label className="modal-label">
             Язык канала:
-            <input
-              className="modal-input"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-            />
+            <div className="flex">
+              <input
+                className="modal-input"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+              />
+              <select
+                className="modal-input "
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                <option value="Введите язык канала">Свой вариант</option>
+                {lang && lang.length > 0
+                  ? lang.map((item) => (
+                      <option key={item} className="" value={item}>
+                        {item}
+                      </option>
+                    ))
+                  : null}
+              </select>
+            </div>
             {errors.language && (
               <span className="error">{errors.language}</span>
             )}

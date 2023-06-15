@@ -1,27 +1,12 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { useFilterContext } from "./FilterContext";
 
 export default function Filters() {
-  const [themes, setThemes] = useState([]);
-  const [lang, setLang] = useState([]);
 
-  const { channels, setSearchQuery, onSearch, searchQuery, onThemeFilter,onLangFilter } = useFilterContext()
+  const { themes,lang, setSearchQuery, onSearch, searchQuery, onThemeFilter,onLangFilter } = useFilterContext()
 
-  useEffect(() => {
 
-    const uniqueThemes = Array.from(
-      new Set(channels.map((channel) => channel.theme))
-    );
-    const uniqueLang = Array.from(
-      new Set(channels.map((channel) => channel.language))
-    );
-
-    setThemes(uniqueThemes);
-  
-    setLang(uniqueLang);
-  }, [channels]);
 
   return (
     <div className="filters lg:text-2xl">
