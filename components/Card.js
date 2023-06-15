@@ -166,6 +166,7 @@ const Card = ({ channel }) => {
             <div className="adding" onClick={openModal}>
               <Image
                 src="/assets/images/add-to-cart.png"
+                  className="cursor-pointer"
                 alt="cart"
                 width={35}
                 height={35}
