@@ -8,10 +8,7 @@ const Card = ({ channel }) => {
   const [price, setPrice] = useState(0);
   const [value, setValue] = useState(1);
   const [buyer, setBuyer] = useState("user");
-  const [email, setEmail] = useState("user@gmail.com");
-  const [phone, setPhone] = useState("+38095000000");
   const [telegram, setTelegram] = useState("@user");
-  const [description, setDescription] = useState("I want to buy");
   const [format, setFormat] = useState("1/24");
   const [errors, setErrors] = useState({});
 
@@ -27,13 +24,9 @@ const Card = ({ channel }) => {
     if (!buyer) {
       validationErrors.buyer = "Пожалуйста, введите ваше имя";
     }
-    if (!email) {
-      validationErrors.email = "Пожалуйста, введите вашу электронную почту";
-    }
-    if (!phone) {
-      validationErrors.phone = "Пожалуйста, введите ваш номер телефона";
-    } else if (!/^\+?\d+$/.test(phone)) {
-      validationErrors.phone = "Номер телефона должен содержать только цифры";
+
+     if (!telegram) {
+      validationErrors.buyer = "Пожалуйста, введите ваш логин в Telegram";
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -47,9 +40,6 @@ const Card = ({ channel }) => {
         },
         body: JSON.stringify({
           buyer_name: buyer,
-          buyer_phone: phone,
-          buyer_email: email,
-          buyer_description: description,
           buyer_telegram: telegram,
           ads_format: format,
           ads_quantity: value,
@@ -70,9 +60,6 @@ const Card = ({ channel }) => {
     }
 
     setBuyer("");
-    setEmail("");
-    setPhone("");
-    setDescription("");
     setTelegram("");
     setErrors({});
     setIsModalOpen(false);
@@ -184,7 +171,7 @@ const Card = ({ channel }) => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <h3>
+        <h3 className="mb-3">
           Спасибо за ваш интерес к рекламе в нашем телеграм-канале! Пожалуйста,
           оставьте свои данные ниже, и мы свяжемся с вами в ближайшее время:
         </h3>
@@ -205,28 +192,6 @@ const Card = ({ channel }) => {
           </label>
 
           <label className="modal-label">
-            Электронная почта:
-            <input
-              className="modal-input"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {errors.email && <span className="error">{errors.email}</span>}
-          </label>
-
-          <label className="modal-label">
-            Номер телефона:
-            <input
-              className="modal-input"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-            {errors.phone && <span className="error">{errors.phone}</span>}
-          </label>
-
-          <label className="modal-label">
             Ваш логин в Telegram:
             <input
               className="modal-input"
@@ -237,15 +202,6 @@ const Card = ({ channel }) => {
             {errors.telegram && (
               <span className="error">{errors.telegram}</span>
             )}
-          </label>
-
-          <label className="modal-label">
-            Краткое описание рекламной кампании:
-            <textarea
-              className="modal-textarea"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            ></textarea>
           </label>
 
           <button type="submit">Отправить</button>

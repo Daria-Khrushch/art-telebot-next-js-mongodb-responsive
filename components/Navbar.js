@@ -3,6 +3,7 @@
 import { signOut, useSession } from "next-auth/react";
 import Filters from "./Filters";
 import { useFilterContext } from "./FilterContext";
+import Link from "next/link";
 
 const Navbar = () => {
   const session = useSession();
@@ -12,7 +13,7 @@ const Navbar = () => {
     <header>
       <nav className="hidden lg:flex items-center justify-between flex-wrap p-4 shadow-lg shadow-slate-20 lg:px-20">
         <div>
-          <h1 className="text-2xl font-bold lg:text-3xl">TeleBot.tg</h1>
+          <h1 className="text-2xl font-bold lg:text-3xl"><Link href="/">TeleBot.tg</Link></h1>
         </div>
 
         {session?.data && (
